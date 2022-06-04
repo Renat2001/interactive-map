@@ -8,8 +8,13 @@ import streamlit as st
 st.set_page_config(layout="wide")
 
 query_params = st.experimental_get_query_params()
-id = int(query_params['id'][0])
-name = query_params['name'][0]
+
+try:
+    id = int(query_params['id'][0])
+    name = query_params['name'][0]
+except:
+    id = 1
+    name = "Admin"
 
 with st.sidebar:
     st.markdown(f"### :alien: {name}")
