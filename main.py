@@ -8,7 +8,7 @@ import streamlit as st
 st.set_page_config(layout="wide")
 
 query_params = st.experimental_get_query_params()
-id = query_params['id'][0]
+id = int(query_params['id'][0])
 name = query_params['name'][0]
 
 # with open('user_id.txt', 'r') as file:
