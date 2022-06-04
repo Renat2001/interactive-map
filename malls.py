@@ -1,7 +1,7 @@
-from database.shops import Table as ShopsTable
-from database.products import Table as ProductsTable
-from database.markers import Table as MarkersTable
-from .tools import sql_result_to_pandas
+from shops_database import Table as ShopsTable
+from products_database import Table as ProductsTable
+from markers_database import Table as MarkersTable
+from tools import sql_result_to_pandas
 import plotly.express as px
 
 

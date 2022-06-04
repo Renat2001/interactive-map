@@ -1,7 +1,7 @@
-from pages.malls import malls_page
-from pages.shops import shops_page
-from pages.products import products_page
-from pages.search_logs import search_logs
+from malls import malls_page
+from shops import shops_page
+from products import products_page
+from search_logs import search_logs
 
 import streamlit as st
 

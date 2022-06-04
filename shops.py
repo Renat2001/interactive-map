@@ -1,6 +1,6 @@
-from database.shops import Table as ShopsTable
-from database.products import Table as ProductsTable
-from .tools import sql_result_to_pandas
+from shops_database import Table as ShopsTable
+from products_database import Table as ProductsTable
+from tools import sql_result_to_pandas
 import plotly.express as px
 import pandas as pd
 import numpy as np
