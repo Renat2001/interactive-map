@@ -1,7 +1,7 @@
-# from pages.malls import malls_page
-# from pages.shops import shops_page
-# from pages.products import products_page
-# from pages.search_logs import search_logs
+from pages.malls import malls_page
+from pages.shops import shops_page
+from pages.products import products_page
+from pages.search_logs import search_logs
 
 import streamlit as st
 
@@ -10,12 +10,6 @@ st.set_page_config(layout="wide")
 query_params = st.experimental_get_query_params()
 id = int(query_params['id'][0])
 name = query_params['name'][0]
-
-# with open('user_id.txt', 'r') as file:
-#     data = file.read().replace('\n', '=').split('=')
-# id = int(data[1])
-# name = data[-1]
-
 
 with st.sidebar:
     st.markdown(f"### :alien: {name}")
@@ -32,14 +26,10 @@ with st.sidebar:
     st.write('You selected:', option)
 
 if option == 'Malls':
-    # malls_page(st)
-    pass
+    malls_page(st)
 elif option == 'Shops':
-    # shops_page(st, id)
-    pass
+    shops_page(st, id)
 elif option == 'Products':
-    # products_page(st, id)
-    pass
+    products_page(st, id)
 else:
-    # search_logs(st)
-    pass
+    search_logs(st)
