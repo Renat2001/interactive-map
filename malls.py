@@ -5,12 +5,8 @@ from tools import sql_result_to_pandas
 import plotly.express as px
 
 
-def sales_revenue_distribution(
-    st,
-    table_df,
-    shops_table_df,
-    products_table_df
-):
+def sales_revenue_distribution(st, table_df, shops_table_df,
+                               products_table_df):
     map_df = table_df.merge(
         shops_table_df,
         left_on='id',
@@ -21,39 +17,28 @@ def sales_revenue_distribution(
         left_on='id_x',
         right_on='shop_id',
         suffixes=(None, "_y")
-    ).groupby(['id', 'name', 'geometry'], as_index=False).sum()[[
-        'id',
-        'name',
-        'geometry',
-        'Sales',
-        'Revenue'
-    ]]
+    ).groupby(['id', 'name', 'geometry'],
+              as_index=False).sum()[['id',
+                                     'name',
+                                     'geometry',
+                                     'Sales',
+                                     'Revenue']]
 
-    map_df['lat'] = map_df['geometry'].str.split(
-        ' ').str[-1].str[:-1].astype(float)
-    map_df['lon'] = map_df['geometry'].str.split(
-        ' ').str[1].str[1:].astype(float)
+    map_df['lat'] = map_df['geometry'].str.split(' ').str[-1].str[:-1].astype(
+        float)
+    map_df['lon'] = map_df['geometry'].str.split(' ').str[1].str[1:].astype(
+        float)
 
     with st.sidebar:
-        value = st.radio(
-            "Choose what to display",
-            ('Sales', 'Revenue'))
+        value = st.radio("Choose what to display",
+                         ('Sales', 'Revenue'))
 
     st.markdown(
         '### Sales :chart_with_upwards_trend: & Revenue :chart: distribution')
-    fig = px.scatter_mapbox(
-        map_df,
-        lat='lat',
-        lon='lon',
-        size=value,
-        color=value,
-        hover_name='name',
-        opacity=1,
-        center=dict(lat=51.1266, lon=71.429),
-        zoom=11,
-        mapbox_style="carto-positron",
-        height=700)
-
+    fig = px.scatter_mapbox(map_df, lat='lat', lon='lon',
+                            size=value, color=value, hover_name='name',
+                            opacity=1, center=dict(lat=51.1266, lon=71.429),
+                            zoom=11.5, mapbox_style="carto-positron", height=700)
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -65,15 +50,11 @@ def sunburst(st, products_table_df):
                       values='Sales', labels={'labels': 'Category',
                                               'Sales': 'Sales',
                                               'parent': 'Parent category',
-                                              'id': 'Full category'}
-                      )
+                                              'id': 'Full category'})
     st.plotly_chart(fig, use_container_width=True)
 
 
-def metrics(
-    st,
-    products_table_df
-):
+def metrics(st, products_table_df):
     st.markdown("### Malls metrics :currency_exchange:")
 
     max_price = products_table_df['Max price'].max()
@@ -104,31 +85,23 @@ def metrics(
 def malls_page(st):
     st.markdown(
         "# :department_store: Interactive map of places - Malls report")
+
     table = MarkersTable().select()
     table_df = sql_result_to_pandas(table, 'markers')
-
     shops_table = ShopsTable().select()
     shops_table_df = sql_result_to_pandas(shops_table, 'nodes')
-
     products_table = ProductsTable().select()
     products_table_df = sql_result_to_pandas(products_table, 'products')
 
-    # st.dataframe(table_df)
-    # st.dataframe(shops_table_df)
-    # st.dataframe(products_table_df)
-
     with st.sidebar:
-        chart_type = st.selectbox(
-            "Choose what to display",
-            ('Sales & Revenue distribuion', 'Metrics', 'Sunburst'))
+        chart_type = st.selectbox("Choose what to display",
+                                  ('Sales & Revenue distribuion',
+                                   'Metrics',
+                                   'Sunburst'))
 
     if chart_type == 'Sales & Revenue distribuion':
-        sales_revenue_distribution(
-            st,
-            table_df,
-            shops_table_df,
-            products_table_df
-        )
+        sales_revenue_distribution(st, table_df, shops_table_df,
+                                   products_table_df)
     elif chart_type == 'Sunburst':
         sunburst(st, products_table_df)
     else:

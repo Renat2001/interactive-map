@@ -1,7 +1,8 @@
 from malls import malls_page
 from shops import shops_page
 from products import products_page
-from search_logs import search_logs
+from search_logs import search_logs_page
+from nlp_search import nlp_search_page
 
 import streamlit as st
 
@@ -22,11 +23,11 @@ with st.sidebar:
     if id == 1:
         option = st.selectbox(
             'Choose preferred page',
-            ('Malls', 'Search logs'))
+            ('Malls', 'Search logs', 'NLP Search'))
     else:
         option = st.selectbox(
             'Choose preferred page',
-            ('Shops', 'Products', 'Search logs'))
+            ('Shops', 'Products', 'Search logs', 'NLP Search'))
 
     st.write('You selected:', option)
 
@@ -36,5 +37,7 @@ elif option == 'Shops':
     shops_page(st, id)
 elif option == 'Products':
     products_page(st, id)
+elif option == 'NLP Search':
+    nlp_search_page(st)
 else:
-    search_logs(st)
+    search_logs_page(st)
