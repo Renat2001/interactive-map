@@ -7,58 +7,34 @@ import numpy as np
 
 
 def sales_revenue_charts(st, product_table_df):
-    sales_columns = product_table_df.columns[product_table_df.columns.str.contains(
-        ' Sales')]
-    revenue_columns = product_table_df.columns[product_table_df.columns.str.contains(
-        ' Revenue')]
-    dates = sorted(
-        pd.to_datetime(
-            sales_columns.str.split(' ').str[0],
-            dayfirst=True)
-    )
+    sales_columns = product_table_df.columns[
+        product_table_df.columns.str.contains(' Sales')]
+    revenue_columns = product_table_df.columns[
+        product_table_df.columns.str.contains(' Revenue')]
+    dates = sorted(pd.to_datetime(sales_columns.str.split(' ').str[0],
+                                  dayfirst=True))
 
-    df = pd.DataFrame(
-        index=dates,
-        data=np.c_[
-            product_table_df[sales_columns].T.values,
-            product_table_df[revenue_columns].T.values
-        ],
-        columns=[
-            'Sales',
-            'Revenue'
-        ]
-    )
+    df = pd.DataFrame(index=dates,
+                      data=np.c_[product_table_df[sales_columns].T.values,
+                                 product_table_df[revenue_columns].T.values],
+                      columns=['Sales', 'Revenue'])
 
     with st.sidebar:
-        chart_type = st.radio(
-            "Choose what to display",
-            ('Sales', 'Revenue'))
+        chart_type = st.radio("Choose what to display",
+                              ('Sales', 'Revenue'))
 
     if chart_type == 'Sales':
         st.markdown("### Sales :chart_with_upwards_trend: chart")
 
-        fig = px.line(
-            df,
-            x=df.index,
-            y=df[df.columns[0]],
-            markers=True,
-            labels={
-                'Sales': 'Sales',
-                'index': 'Date'
-            })
+        fig = px.line(df, x=df.index, y=df[df.columns[0]], markers=True,
+                      labels={'Sales': 'Sales', 'index': 'Date'})
+
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.markdown("### Revenue :chart: chart")
 
-        fig = px.line(
-            df,
-            x=df.index,
-            y=df[df.columns[1]],
-            markers=True,
-            labels={
-                'Revenue': 'Revenue',
-                'index': 'Date'
-            })
+        fig = px.line(df, x=df.index, y=df[df.columns[1]], markers=True,
+                      labels={'Revenue': 'Revenue', 'index': 'Date'})
 
         st.plotly_chart(fig, use_container_width=True)
 
@@ -92,6 +68,51 @@ def metrics(st, product_table_df):
                     f"{sales_per_day_average}", "13.45 %")
 
 
+def charts_by_period(st, product_table_df):
+    sales_columns = product_table_df.columns[
+        product_table_df.columns.str.contains(' Sales')]
+    revenue_columns = product_table_df.columns[
+        product_table_df.columns.str.contains(' Revenue')]
+    dates = sorted(pd.to_datetime(sales_columns.str.split(' ').str[0],
+                                  dayfirst=True))
+
+    df = pd.DataFrame(index=dates,
+                      data=np.c_[product_table_df[sales_columns].T.values,
+                                 product_table_df[revenue_columns].T.values],
+                      columns=['Sales', 'Revenue'])
+
+    column_1, column_2 = st.columns(2)
+
+    with st.sidebar:
+        chart_type = st.radio(
+            "Choose a period",
+            ('Month', 'Day'))
+
+    if chart_type == 'Month':
+        df = df.groupby(df.index.strftime("%B")).sum()
+        column_1.markdown("### Sales :chart_with_upwards_trend: by month")
+        fig = px.bar(df, x=df.index, y=df[df.columns[0]],
+                     labels={'Sales': 'Sales', 'index': 'Month'})
+        column_1.plotly_chart(fig, use_container_width=True)
+
+        column_2.markdown("### Revenue :chart: by month")
+        fig = px.bar(df, x=df.index, y=df[df.columns[1]],
+                     labels={'Revenue': 'Revenue', 'index': 'Month'})
+        column_2.plotly_chart(fig, use_container_width=True)
+    else:
+        df = df.groupby(
+            df.index.strftime("%a")).sum().iloc[[1, 5, 6, 4, 0, 2, 3], :]
+        column_1.markdown("### Sales :chart_with_upwards_trend: by day")
+        fig = px.bar(df, x=df.index, y=df[df.columns[0]],
+                     labels={'Sales': 'Sales', 'index': 'Day'})
+        column_1.plotly_chart(fig, use_container_width=True)
+
+        column_2.markdown("### Revenue :chart: by day")
+        fig = px.bar(df, x=df.index, y=df[df.columns[1]],
+                     labels={'Revenue': 'Revenue', 'index': 'Day'})
+        column_2.plotly_chart(fig, use_container_width=True)
+
+
 def products_page(st, id):
     st.markdown(
         "# :shopping_trolley: Interactive map of places - Products report")
@@ -104,22 +125,23 @@ def products_page(st, id):
     products_table_df = sql_result_to_pandas(products_table, 'products')
 
     st.markdown("### Products selection :clipboard:")
-    product_name = st.selectbox(
-        "Choose a product",
-        tuple(products_table_df['Name'].values.tolist()))
-
+    product_name = st.selectbox("Choose a product",
+                                tuple(products_table_df['Name'].values.tolist()))
+         
     product_table_df = products_table_df[
         products_table_df['Name'] == product_name
     ].iloc[:1]
 
     with st.sidebar:
-        option = st.selectbox(
-            'Choose a chart?',
-            ('Sales & Revenue charts', 'Metrics'))
-
+        option = st.selectbox('Choose a chart?',
+                              ('Sales & Revenue charts',
+                               'Metrics',
+                               'Charts by period'))
         st.write('You selected:', option)
 
     if option == 'Sales & Revenue charts':
         sales_revenue_charts(st, product_table_df)
     elif option == 'Metrics':
         metrics(st, product_table_df)
+    elif option == 'Charts by period':
+        charts_by_period(st, product_table_df)
