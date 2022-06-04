@@ -57,6 +57,19 @@ def sales_revenue_distribution(
     st.plotly_chart(fig, use_container_width=True)
 
 
+def sunburst(st, products_table_df):
+    st.markdown("### Sunburst :sunny: chart of categories")
+
+    products_table_df = products_table_df.fillna('')
+    fig = px.sunburst(products_table_df, path=['category_0', 'category_1'],
+                      values='Sales', labels={'labels': 'Category',
+                                              'Sales': 'Sales',
+                                              'parent': 'Parent category',
+                                              'id': 'Full category'}
+                      )
+    st.plotly_chart(fig, use_container_width=True)
+
+
 def metrics(
     st,
     products_table_df
@@ -107,7 +120,7 @@ def malls_page(st):
     with st.sidebar:
         chart_type = st.selectbox(
             "Choose what to display",
-            ('Sales & Revenue distribuion', 'Metrics'))
+            ('Sales & Revenue distribuion', 'Metrics', 'Sunburst'))
 
     if chart_type == 'Sales & Revenue distribuion':
         sales_revenue_distribution(
@@ -116,5 +129,7 @@ def malls_page(st):
             shops_table_df,
             products_table_df
         )
+    elif chart_type == 'Sunburst':
+        sunburst(st, products_table_df)
     else:
         metrics(st, products_table_df)
