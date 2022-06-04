@@ -1,0 +1,4 @@
+pandas
+shillelagh
+shillelagh[gsheetsapi]
+plotly
