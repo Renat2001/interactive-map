@@ -2,3 +2,5 @@ pandas
 shillelagh
 shillelagh[gsheetsapi]
 plotly
+spacy
+sklearn
