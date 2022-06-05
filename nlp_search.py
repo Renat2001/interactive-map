@@ -22,7 +22,7 @@ def nlp_search_page(st):
         **First 5 rows of data**: 
         """)
     data = pd.read_csv(
-        r"data\data.csv")
+        r"\app\diploma\data\data.csv")
     st.table(data.head(5))
 
     st.markdown("## :hammer: Data pre-processing")
@@ -42,7 +42,7 @@ def nlp_search_page(st):
 
     st.markdown(f"#### :hammer_and_wrench: Result of Data pre-processing")
     preprocessed_data = pd.read_csv(
-        r"data\preprocessed_data.csv")
+        r"\app\diploma\data\preprocessed_data.csv")
     st.table(preprocessed_data.head(5))
 
     st.markdown("## :gear: Data vectorization with TF-IDF Vectorizer")
