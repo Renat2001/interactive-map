@@ -1,8 +1,8 @@
 from malls import malls_page
 from shops import shops_page
 from products import products_page
-from search_logs import search_logs_page
-from nlp_search import nlp_search_page
+# from search_logs import search_logs_page
+# from nlp_search import nlp_search_page
 
 import streamlit as st
 
@@ -37,7 +37,7 @@ elif option == 'Shops':
     shops_page(st, id)
 elif option == 'Products':
     products_page(st, id)
-elif option == 'NLP Search':
-    nlp_search_page(st)
-else:
-    search_logs_page(st)
+# elif option == 'NLP Search':
+#     nlp_search_page(st)
+# else:
+#     search_logs_page(st)
