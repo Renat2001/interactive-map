@@ -11,14 +11,14 @@ def nlp_search_page(st):
     st.markdown("# :mag: Interactive map of places - NLP Search")
 
     st.markdown("## :newspaper: About dataset")
+    column_1, column_2, column_3 = st.columns(3)
+    column_1.metric("Size", "8.6 mln records")
+    column_2.metric("Sample size", "26k records")
+    column_3.metric("Columns", "Name, Category")
+    column_1.metric("Predictor", "Name")
+    column_2.metric("Target", "Category")
     st.markdown(
         """
-        **Description**: Data of products from Wildberries online e-commerce store. \n
-        **Size**: 8.6 mln records \n
-        **Sample size**: 26k records \n
-        **Columns**: *Name* and *Category* \n
-        **Independent variable or Predictor**: *Name* \n
-        **Dependent variable or Target**: *Category* \n
         **First 5 rows of data**: 
         """)
     data = pd.read_csv(
@@ -92,6 +92,9 @@ def nlp_search_page(st):
     st.markdown("## :heavy_check_mark: Model testing")
     test_text = st.text_input("Type what to search", "Кеды")
     # Футбольные бутсы
+    # Борцовки
+    # Футболка
+    # Прикуриватель
     test_doc = nlp(test_text)
     test_doc = [token.lemma_ for token in test_doc if not token.is_punct]
     test_doc = [

@@ -42,6 +42,8 @@ products_columns = [
 
 markers_columns = ["id", "name", "geometry"]
 
+search_logs_columns = ["id", "user_id", "query", "date", "time"]
+
 
 def sql_result_to_pandas(sql_result: list, table_name: str):
     if table_name == 'ways':
@@ -52,6 +54,9 @@ def sql_result_to_pandas(sql_result: list, table_name: str):
 
     if table_name == 'markers':
         return pd.DataFrame(sql_result, columns=markers_columns)
+
+    if table_name == 'search_logs':
+        return pd.DataFrame(sql_result, columns=search_logs_columns)
 
     return pd.DataFrame(sql_result, columns=products_columns)
 
