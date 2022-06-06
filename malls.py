@@ -34,7 +34,7 @@ def sales_revenue_distribution(st, table_df, shops_table_df,
                          ('Sales', 'Revenue'))
 
     st.markdown(
-        '### Sales :chart_with_upwards_trend: & Revenue :chart: distribution')
+        '## :chart_with_upwards_trend: Sales & Revenue distribution')
     fig = px.scatter_mapbox(map_df, lat='lat', lon='lon',
                             size=value, color=value, hover_name='name',
                             opacity=1, center=dict(lat=51.1266, lon=71.429),
@@ -43,7 +43,7 @@ def sales_revenue_distribution(st, table_df, shops_table_df,
 
 
 def sunburst(st, products_table_df):
-    st.markdown("### Sunburst :sunny: chart of categories")
+    st.markdown("## :sunny: Sunburst chart of categories")
 
     products_table_df = products_table_df.fillna('')
     fig = px.sunburst(products_table_df, path=['category_0', 'category_1'],
@@ -55,28 +55,29 @@ def sunburst(st, products_table_df):
 
 
 def metrics(st, products_table_df):
-    st.markdown("### Malls metrics :currency_exchange:")
+    st.markdown("## :currency_exchange: Malls metrics")
 
     max_price = products_table_df['Max price'].max()
     min_price = products_table_df['Min price'].min()
-    average_price = products_table_df['Average price'].mean()
+    average_price = products_table_df['Average price'].mean()//1000
     total_sales = products_table_df['Sales'].sum()
     total_revenue = products_table_df['Revenue'].sum()
-    revenue_potential = products_table_df['Revenue potential'].mean()
-    lost_profit = products_table_df['Lost profit'].mean()
-    lost_profit_percent = products_table_df['Lost profit percent'].mean()
-    sales_per_day_average = products_table_df['Sales per day average'].mean()
+    revenue_potential = products_table_df['Revenue potential'].mean()//1000
+    lost_profit = products_table_df['Lost profit'].mean()//1000
+    lost_profit_percent = products_table_df['Lost profit percent'].mean()//1000
+    sales_per_day_average = products_table_df['Sales per day average'].mean(
+    )//1000
 
     column_1, column_2, column_3 = st.columns(3)
-    column_1.metric("Max price", f"{max_price} $", "10 %")
-    column_2.metric("Min price", f"{min_price} $", "8.55 %")
-    column_3.metric("Average price", f"{average_price} $", "0.12 %")
+    column_1.metric("Max price", f"{max_price}", "10 %")
+    column_2.metric("Min price", f"{min_price}", "8.55 %")
+    column_3.metric("Average price", f"{average_price}", "0.12 %")
 
     column_1.metric("Sales", f"{total_sales}", "-0.88 %")
-    column_2.metric("Revenue", f"{total_revenue} $", "-0.86 %")
+    column_2.metric("Revenue", f"{total_revenue}", "-0.86 %")
     column_3.metric("Revenue potential", f"{revenue_potential}", "40 %")
 
-    column_1.metric("Lost profit", f"{lost_profit} $", "-10%")
+    column_1.metric("Lost profit", f"{lost_profit}", "-10%")
     column_2.metric("Lost profit percent", f"{lost_profit_percent}", "8.55 %")
     column_3.metric("Sales per day average",
                     f"{sales_per_day_average}", "13.45 %")

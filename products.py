@@ -24,14 +24,14 @@ def sales_revenue_charts(st, product_table_df):
                               ('Sales', 'Revenue'))
 
     if chart_type == 'Sales':
-        st.markdown("### Sales :chart_with_upwards_trend: chart")
+        st.markdown("## :chart_with_upwards_trend: Sales chart")
 
         fig = px.line(df, x=df.index, y=df[df.columns[0]], markers=True,
                       labels={'Sales': 'Sales', 'index': 'Date'})
 
         st.plotly_chart(fig, use_container_width=True)
     else:
-        st.markdown("### Revenue :chart: chart")
+        st.markdown("## :chart: Revenue chart")
 
         fig = px.line(df, x=df.index, y=df[df.columns[1]], markers=True,
                       labels={'Revenue': 'Revenue', 'index': 'Date'})
@@ -40,29 +40,29 @@ def sales_revenue_charts(st, product_table_df):
 
 
 def metrics(st, product_table_df):
-    st.markdown("### Product metrics :currency_exchange:")
+    st.markdown("## :currency_exchange: Product metrics")
 
     max_price = product_table_df['Max price'].iloc[0]
     min_price = product_table_df['Min price'].iloc[0]
     average_price = product_table_df['Average price'].iloc[0]
     total_sales = product_table_df['Sales'].iloc[0]
     total_revenue = product_table_df['Revenue'].iloc[0]
-    revenue_potential = product_table_df['Revenue potential'].iloc[0]
-    lost_profit = product_table_df['Lost profit'].iloc[0]
-    lost_profit_percent = product_table_df['Lost profit percent'].iloc[0]
-    sales_per_day_average = product_table_df['Sales per day average'].iloc[0]
+    revenue_potential = product_table_df['Revenue potential'].iloc[0]//1000
+    lost_profit = product_table_df['Lost profit'].iloc[0]//1000
+    lost_profit_percent = product_table_df['Lost profit percent'].iloc[0]//1000
+    sales_per_day_average = product_table_df['Sales per day average'].iloc[0]//1000
 
     column_1, column_2, column_3 = st.columns(3)
 
-    column_1.metric("Max price", f"{max_price} $", "10 %")
-    column_2.metric("Min price", f"{min_price} $", "8.55 %")
-    column_3.metric("Average price", f"{average_price} $", "0.12 %")
+    column_1.metric("Max price", f"{max_price}", "10 %")
+    column_2.metric("Min price", f"{min_price}", "8.55 %")
+    column_3.metric("Average price", f"{average_price}", "0.12 %")
 
     column_1.metric("Sales", f"{total_sales}", "-0.88 %")
-    column_2.metric("Revenue", f"{total_revenue} $", "-0.86 %")
+    column_2.metric("Revenue", f"{total_revenue}", "-0.86 %")
     column_3.metric("Revenue potential", f"{revenue_potential}", "40 %")
 
-    column_1.metric("Lost profit", f"{lost_profit} $", "-10%")
+    column_1.metric("Lost profit", f"{lost_profit}", "-10%")
     column_2.metric("Lost profit percent", f"{lost_profit_percent}", "8.55 %")
     column_3.metric("Sales per day average",
                     f"{sales_per_day_average}", "13.45 %")
@@ -90,24 +90,24 @@ def charts_by_period(st, product_table_df):
 
     if chart_type == 'Month':
         df = df.groupby(df.index.strftime("%B")).sum()
-        column_1.markdown("### Sales :chart_with_upwards_trend: by month")
+        column_1.markdown("## :chart_with_upwards_trend: Sales by month")
         fig = px.bar(df, x=df.index, y=df[df.columns[0]],
                      labels={'Sales': 'Sales', 'index': 'Month'})
         column_1.plotly_chart(fig, use_container_width=True)
 
-        column_2.markdown("### Revenue :chart: by month")
+        column_2.markdown("## :chart: Revenue by month")
         fig = px.bar(df, x=df.index, y=df[df.columns[1]],
                      labels={'Revenue': 'Revenue', 'index': 'Month'})
         column_2.plotly_chart(fig, use_container_width=True)
     else:
         df = df.groupby(
             df.index.strftime("%a")).sum().iloc[[1, 5, 6, 4, 0, 2, 3], :]
-        column_1.markdown("### Sales :chart_with_upwards_trend: by day")
+        column_1.markdown("## :chart_with_upwards_trend: Sales by day")
         fig = px.bar(df, x=df.index, y=df[df.columns[0]],
                      labels={'Sales': 'Sales', 'index': 'Day'})
         column_1.plotly_chart(fig, use_container_width=True)
 
-        column_2.markdown("### Revenue :chart: by day")
+        column_2.markdown("## :chart: Revenue by day")
         fig = px.bar(df, x=df.index, y=df[df.columns[1]],
                      labels={'Revenue': 'Revenue', 'index': 'Day'})
         column_2.plotly_chart(fig, use_container_width=True)
@@ -124,10 +124,10 @@ def products_page(st, id):
     products_table = ProductsTable().select_by_node_id(node_id)
     products_table_df = sql_result_to_pandas(products_table, 'products')
 
-    st.markdown("### Products selection :clipboard:")
+    st.markdown("## :clipboard: Products selection")
     product_name = st.selectbox("Choose a product",
                                 tuple(products_table_df['Name'].values.tolist()))
-         
+
     product_table_df = products_table_df[
         products_table_df['Name'] == product_name
     ].iloc[:1]
