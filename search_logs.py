@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def hourly_activity(st, table_df):
-    st.markdown("## Activity by hours")
+    st.markdown("## :hourglass: Activity by hours")
     df = table_df.groupby(table_df['datetime'].dt.hour).count()
     fig = px.bar(df, x=df.index, y=df[df.columns[1]],
                  labels={'user_id': 'Activity', 'index': 'Hour'})
@@ -14,7 +14,7 @@ def hourly_activity(st, table_df):
 
 
 def monthly_activity(st, table_df):
-    st.markdown("## Activity by month")
+    st.markdown("## :hourglass: Activity by month")
     df = table_df.groupby(table_df['datetime'].dt.strftime("%B")).count()
     fig = px.bar(df, x=df.index, y=df[df.columns[1]],
                  labels={'user_id': 'Activity', 'index': 'Month'})
@@ -23,7 +23,7 @@ def monthly_activity(st, table_df):
 
 
 def daily_activity(st, table_df):
-    st.markdown("## Activity by days")
+    st.markdown("## :hourglass: Activity by days")
     df = table_df.groupby(table_df['datetime'].dt.strftime("%A")).count()
     fig = px.bar(df, x=df.index, y=df[df.columns[1]],
                  labels={'user_id': 'Activity', 'index': 'Day'})
@@ -32,7 +32,7 @@ def daily_activity(st, table_df):
 
 
 def product_demand(st, table_df):
-    st.markdown("## Activity by days")
+    st.markdown("## :scroll: Search history")
     products = tuple(table_df.groupby('query', as_index=False).count(
     ).sort_values('id', ascending=False)['query'].values.tolist())
     product = st.selectbox('Choose a product',
